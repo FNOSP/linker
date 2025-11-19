@@ -11,12 +11,12 @@ jobs:
         run: sudo apt-get install tar gzip
       - name: sed shell
         run: 
-          cd src/docker
-          sed -i 's/\r$//' manifest
-          sed -i 's/\r$//' cmd/main
-          sed -i 's/\r$//' cmd/uninstall_callback
-          tar -czf app.tgz --transform='s,app/,,g' app/docker app/ui config
-          tar -czf linker.fpk --exclude='app' *
+          cd src/docker;
+          sed -i 's/\r$//' manifest;
+          sed -i 's/\r$//' cmd/main;
+          sed -i 's/\r$//' cmd/uninstall_callback;
+          tar -czf app.tgz --transform='s,app/,,g' app/docker app/ui config;
+          tar -czf linker.fpk --exclude='app' *;
           mv linker.fpk linker-docker-x64.fpk
       - name: create release
         id: create_release
