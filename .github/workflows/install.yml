@@ -1,0 +1,42 @@
+name: InstallPack
+'on':
+  workflow_dispatch: null
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+     
+      - name: setup install
+        run: sudo apt-get install tar gzip
+      - name: sed shell
+        run: 
+          cd src/docker
+          sed -i 's/\r$//' manifest
+          sed -i 's/\r$//' cmd/main
+          sed -i 's/\r$//' cmd/uninstall_callback
+          tar -czf app.tgz --transform='s,app/,,g' app/docker app/ui config
+          tar -czf linker.fpk --exclude='app' *
+          mv linker.fpk linker-docker-x64.fpk
+      - name: create release
+        id: create_release
+        uses: GongT/actions-recreate-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+        with:
+          tag_name: v1.0.0
+          release_name: v1.0.0
+          draft: false
+          prerelease: false
+          body: "发布"
+      - name: upload
+        id: upload
+        uses: actions/upload-release-asset@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: ./src/docker/linker-docker-x64.fpk
+          asset_name: linker-docker-x64.fpk
+          asset_content_type: application/fpk
+   
