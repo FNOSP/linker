@@ -1,5 +1,5 @@
 <div align="center">
-<p><img src="./readme/logo.png" height="240"></p> 
+<p><img src="./src/docker/app/ui/images/icon_256.png" height="240"></p> 
 
 # Linker
 
